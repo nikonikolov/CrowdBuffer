@@ -21,9 +21,9 @@ def random_date(start,l):
 
 class Location:
 
-	def __init__(self, name, graph, location_type,gps_location,avg_duration):
+	def __init__(self, name, id, location_type,gps_location,avg_duration):
 		self.name = name
-		self.graph = graph
+		self.id = id
 		self.location_type = location_type
 		self.gps_location = gps_location
 		self.avg_duration = avg_duration
@@ -46,6 +46,13 @@ class Location:
 		for i in range(len(locations)):
 			if locations[i] != self:
 				self.dist += 1/(distance(self.gps_location, locations[i].gps_location))
+
+	def add_time_in(self, time_in, prev_loc, time_out):
+		self.time_in.append(time_in)
+		prev_loc.next.append((time_out, self))
+
+	def add_time_out(self, time_out):
+		self.time_out.append(time_out)
 
 	def set_next(self):
 		self.next = []
@@ -158,10 +165,10 @@ def suggestLocation(id, currentTime):
 	loc = locations[id]
   	for location in locations:
   		location_count[location.name] = 0
-	for i in range(len(loc.time_out)-15):
-		if(abs(loc.time_out[i]- currentTime) < datetime.timedelta(minutes=60)) :
-			if loc.next[i] != None:
-				location_count[loc.next[i].name] += 1
+	for i in range(len(loc.next)):
+		if(abs(loc.next[0][i]- currentTime) < datetime.timedelta(minutes=60)) :
+			#if loc.next[i] != None:
+			location_count[loc.next[1][i].id] += 1
 	d_sorted_by_value = OrderedDict(sorted(location_count.items(), key=lambda x: x[1], reverse = True))
 	keyss = d_sorted_by_value.keys()
 	#print keyss
@@ -172,63 +179,41 @@ def suggestLocation(id, currentTime):
 
 locations = []
 #preferences = Preferences(10, "restaurant");
-baileys = Location("baileys", "", "restaurant", Gps_location(51.480936, -0.204203),40)
-baileys.init_time()
+baileys = Location("baileys", 0, "restaurant", Gps_location(51.480936, -0.204203),40)
 locations.append(baileys)
 
-seven_park_place = Location("seven park place", "", "restaurant", Gps_location(51.506295, -0.140369), 120)
-seven_park_place.init_time()
+seven_park_place = Location("seven park place", 1, "restaurant", Gps_location(51.506295, -0.140369), 120)
 locations.append(seven_park_place)
 
-duck_and_waffle = Location("duck and waffle", "", "restaurant", Gps_location(51.516211, -0.080881), 100)
-duck_and_waffle.init_time()
+duck_and_waffle = Location("duck and waffle", 2, "restaurant", Gps_location(51.516211, -0.080881), 100)
 locations.append(duck_and_waffle)
 
-natural_history_museum = Location("natural history museum", "", "tourism", Gps_location(51.496829, -0.176346), 150)
-natural_history_museum.init_time()
+natural_history_museum = Location("natural history museum", 3, "tourism", Gps_location(51.496829, -0.176346), 150)
 locations.append(natural_history_museum)
 
-natural_science_museum = Location("natural science museum", "", "tourism", Gps_location(51.497770, -0.174490), 150)
-natural_science_museum.init_time()
+natural_science_museum = Location("natural science museum", 4, "tourism", Gps_location(51.497770, -0.174490), 150)
 locations.append(natural_science_museum)
 
-madame_tussauds = Location("madame tussauds", "", "tourism", Gps_location(51.523030, -0.154967), 150)
-madame_tussauds.init_time()
+madame_tussauds = Location("madame tussauds", 5, "tourism", Gps_location(51.523030, -0.154967), 150)
 locations.append(madame_tussauds)
 
-british_museum = Location("british museum", "", "tourism", Gps_location(51.519553, -0.126989), 150)
-british_museum.init_time()
+british_museum = Location("british museum", 6, "tourism", Gps_location(51.519553, -0.126989), 150)
 locations.append(british_museum)
 
-st_paul_cathedral = Location("st paul cathedral", "", "tourism", Gps_location(51.514006, -0.098361), 80)
-st_paul_cathedral.init_time()
+st_paul_cathedral = Location("st paul cathedral", 7, "tourism", Gps_location(51.514006, -0.098361), 80)
 locations.append(st_paul_cathedral)
 
-sushi_samba = Location("SUSHISAMBA", "", "restaurant", Gps_location(51.516450, -0.080978), 50)
-sushi_samba.init_time()
+sushi_samba = Location("SUSHISAMBA", 8, "restaurant", Gps_location(51.516450, -0.080978), 50)
 locations.append(sushi_samba)
 
-the_shard = Location("the shard", "", "tourism", Gps_location(51.504539, -0.086301), 90)
-the_shard.init_time()
+the_shard = Location("the shard", 9, "tourism", Gps_location(51.504539, -0.086301), 90)
 locations.append(the_shard)
 
-national_maritime_museum = Location("national maritime museum", "", "tourism", Gps_location(51.481015, -0.005300), 90)
-national_maritime_museum.init_time()
+national_maritime_museum = Location("national maritime museum", 10, "tourism", Gps_location(51.481015, -0.005300), 90)
 locations.append(national_maritime_museum)
 
-location_a = Location("location a", "", "restaurant", Gps_location(51.486968, -0.020824), 60)
-location_a.init_time()
+location_a = Location("location a", 11, "restaurant", Gps_location(51.486968, -0.020824), 60)
 locations.append(location_a)
 
-location_b = Location("location b", "", "tourism", Gps_location(51.492419, -0.010868), 120)
-location_b.init_time()
+location_b = Location("location b", 12, "tourism", Gps_location(51.492419, -0.010868), 120)
 locations.append(location_b)
-
-for location in locations:
-	location.compute_total_distance()
-	location.set_next()
-location_a.plot_hour_graph()
-
-user = User("fy", natural_history_museum)
-currentTime = datetime.datetime(2013, 9, 23,10,11)
-print suggestLocation(user, currentTime)

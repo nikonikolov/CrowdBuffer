@@ -33,7 +33,8 @@ def enter_building():
 	searchid = request.args.get('id', '')
 	searchprevid = request.args.get('prev_id', '')
 	searchtime = request.args.get('time_stamp', '')
-
+	dtime = datetime.datetime.time(datetime.datetime.now())
+	location[searchid].add_time_in(dtime, searchprevid, searchtime)
 	#print "before"
 	idx = FindPlace(int(searchid) , listPlaces)
 	#print "after"
@@ -49,6 +50,8 @@ def exit_building():
 	searchid = request.args.get('id', '')
 	idx = FindPlace(int(searchid) , listPlaces)
 	listPlaces[idx].PersonOut()
+	dtime = datetime.datetime.time(datetime.datetime.now())
+	location[searchid].add_time_out(dtime)
 
 	resp = Response("Foo bar baz")
 	resp.headers['sth'] = 'value'
