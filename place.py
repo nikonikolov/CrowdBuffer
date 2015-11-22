@@ -31,7 +31,7 @@ def FindPlace(placeWanted, listPlaces):
 		print idx
 		if listPlaces[idx].GetId() == placeWanted : break
 
-	return listPlaces[idx].GetId()
+	return idx
 
 
 

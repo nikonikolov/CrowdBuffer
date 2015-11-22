@@ -152,15 +152,16 @@ def distance(location1, location2):
     return acos(cos_x) * EARTH_RADIUS_IN_MILES
 
 
-def suggestLocation(user, currentTime):
+def suggestLocation(id, currentTime):
 	suggest = []
 	location_count = dict()
+	loc = locations[id]
   	for location in locations:
   		location_count[location.name] = 0
-	for i in range(len(user.location.time_out)-15):
-		if(abs(user.location.time_out[i]- currentTime) < datetime.timedelta(minutes=60)) :
-			if user.location.next[i] != None:
-				location_count[user.location.next[i].name] += 1
+	for i in range(len(loc.time_out)-15):
+		if(abs(loc.time_out[i]- currentTime) < datetime.timedelta(minutes=60)) :
+			if loc.next[i] != None:
+				location_count[loc.next[i].name] += 1
 	d_sorted_by_value = OrderedDict(sorted(location_count.items(), key=lambda x: x[1], reverse = True))
 	keyss = d_sorted_by_value.keys()
 	#print keyss
