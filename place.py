@@ -26,9 +26,9 @@ class Place:
 		print "Name: " + self.name + " Id: " + self.id + " Count: " + self.count
 
 def FindPlace(placeWanted, listPlaces):
-	print 'hello'
+	#print 'hello'
 	for idx in range(len(listPlaces)):
-		print idx
+		#print idx
 		if listPlaces[idx].GetId() == placeWanted : break
 
 	return idx

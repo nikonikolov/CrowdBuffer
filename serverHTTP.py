@@ -34,7 +34,7 @@ def enter_building():
 	searchprevid = request.args.get('prev_id', '')
 	searchtime = request.args.get('time_stamp', '')
 	dtime = datetime.datetime.time(datetime.datetime.now())
-	location[searchid].add_time_in(dtime, searchprevid, searchtime)
+	locations[int(searchid)].add_time_in(dtime, int(searchprevid), searchtime)
 	#print "before"
 	idx = FindPlace(int(searchid) , listPlaces)
 	#print "after"
@@ -51,7 +51,7 @@ def exit_building():
 	idx = FindPlace(int(searchid) , listPlaces)
 	listPlaces[idx].PersonOut()
 	dtime = datetime.datetime.time(datetime.datetime.now())
-	location[searchid].add_time_out(dtime)
+	locations[int(searchid)].add_time_out(dtime)
 
 	resp = Response("Foo bar baz")
 	resp.headers['sth'] = 'value'
@@ -75,8 +75,8 @@ if __name__ == '__main__':
 	app.debug = True
 	
 	# host='0.0.0.0' makes it visible to other machines on the network
-	app.run(host='0.0.0.0')
-	#app.run()
+	#app.run(host='0.0.0.0')
+	app.run()
 
 
 def find_suggested_data(id):

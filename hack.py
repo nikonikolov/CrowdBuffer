@@ -27,6 +27,9 @@ class Location:
 		self.location_type = location_type
 		self.gps_location = gps_location
 		self.avg_duration = avg_duration
+		self.time_in = []
+		self.time_out = []
+		self.next = []
 
 	def init_time(self) :
 		self.set_time_in()
@@ -49,7 +52,6 @@ class Location:
 
 	def add_time_in(self, time_in, prev_id, time_out):
 		if(prev_id != -1) :
-
 			self.time_in.append(time_in)
 			locations[prev_id].next.append((time_out, self))
 
