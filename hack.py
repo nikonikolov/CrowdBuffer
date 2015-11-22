@@ -47,9 +47,11 @@ class Location:
 			if locations[i] != self:
 				self.dist += 1/(distance(self.gps_location, locations[i].gps_location))
 
-	def add_time_in(self, time_in, prev_loc, time_out):
-		self.time_in.append(time_in)
-		prev_loc.next.append((time_out, self))
+	def add_time_in(self, time_in, prev_id, time_out):
+		if(prev_id != -1) :
+
+			self.time_in.append(time_in)
+			locations[prev_id].next.append((time_out, self))
 
 	def add_time_out(self, time_out):
 		self.time_out.append(time_out)
